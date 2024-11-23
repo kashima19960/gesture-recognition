@@ -1,6 +1,10 @@
 # Hand Gesture Recognition Based on Long Short-Term Memory Neural Network
+reading this in [简体中文](./README_ZH.md)
+
 
 ## Dataset Description
+
+
 
 The dataset used in this project is sourced from [HAND GESTURES RECORDED WITH MM-WAVE FMCW RADAR (AWR1642)](https://ieee-dataport.org/open-access/hand-gestures-recorded-mm-wave-fmcw-radar-awr1642).
 
