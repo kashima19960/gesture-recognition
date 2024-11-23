@@ -15,14 +15,24 @@ print("Pytorch version --",torch.__version__)
 # 设置中文字体
 plt.rcParams['font.sans-serif'] = ['SimHei']  # 使用黑体
 plt.rcParams['axes.unicode_minus'] = False  # 解决负号显示问题
-#训练数据集不同，导致训练出来的差异很大
+
 class RNN_LSTM(nn.Module):
+    """
+    定义一个全连接层（线性层），用于将LSTM的输出映射到类别数量。
+
+    参数:
+    - neurons_num: LSTM隐藏层的神经元数量。
+    - class_number: 分类任务中的类别数量。
+
+    该全连接层的输入维度为 neurons_num * 80，输出维度为 class_number。
+    """
     def __init__(self):
         super(RNN_LSTM, self).__init__()
         self.hidden_size = neurons_num
         self.num_layers = num_layers
         self.lstm = nn.LSTM(80 * frame_parameters, neurons_num, self.num_layers, batch_first=True)
         self.fc1 = nn.Linear(neurons_num * 80, class_number)
+
 
     def forward(self, x):
         h0 = torch.zeros(self.num_layers, x.size(0), self.hidden_size).to(device)
@@ -35,6 +45,27 @@ class RNN_LSTM(nn.Module):
 
 
 def train_model(net, train_X, train_y, test_X, test_y, criterion, optimizer, device):
+    """
+    训练模型的函数。
+
+    参数:
+    - net: 神经网络模型，类型为 RNN_LSTM。
+    - train_X: 训练数据集的输入特征，类型为 torch.Tensor。
+    - train_y: 训练数据集的标签，类型为 torch.Tensor。
+    - test_X: 测试数据集的输入特征，类型为 torch.Tensor。
+    - test_y: 测试数据集的标签，类型为 torch.Tensor。
+    - criterion: 损失函数，类型为 torch.nn.modules.loss。
+    - optimizer: 优化器，类型为 torch.optim.Optimizer。
+    - device: 设备类型，类型为 torch.device。
+
+    返回值:
+    - loss_list: 损失值列表，记录每次迭代的损失值。
+    - accuracy_list: 准确率列表，记录每次迭代的准确率。
+    - iteration_list: 迭代次数列表，记录每次迭代的次数。
+
+    该函数通过遍历训练数据集，计算损失并更新模型参数。每200次迭代计算一次测试集的准确率，并记录损失值和准确率。
+    如果准确率超过设定的阈值，则提前终止训练。
+    """
     loss_list = []
     accuracy_list = []
     iteration_list = []
@@ -66,6 +97,20 @@ def train_model(net, train_X, train_y, test_X, test_y, criterion, optimizer, dev
     return loss_list, accuracy_list, iteration_list
 
 def calculate_accuracy(net, test_X, test_y, device):
+    """
+    计算模型在测试数据集上的准确率。
+
+    参数:
+    - net: 神经网络模型，类型为 RNN_LSTM。
+    - test_X: 测试数据集的输入特征，类型为 torch.Tensor。
+    - test_y: 测试数据集的标签，类型为 torch.Tensor。
+    - device: 设备类型，类型为 torch.device。
+
+    返回值:
+    - accuracy: 模型在测试数据集上的准确率，类型为 float。
+
+    该函数通过遍历测试数据集，计算模型预测正确的样本数占总样本数的比例，从而得到模型的准确率。
+    """
     total_correct = 0
     total_number = 0
     with torch.no_grad():
@@ -88,6 +133,23 @@ def calculate_accuracy(net, test_X, test_y, device):
     return round(total_correct / total_number, 3)
 
 def evaluate_model(net, test_X, test_y, device):
+    """
+    评估模型在测试数据集上的性能。
+
+    参数:
+    - net: 神经网络模型，类型为 RNN_LSTM。
+    - test_X: 测试数据集的输入特征，类型为 torch.Tensor。
+    - test_y: 测试数据集的标签，类型为 torch.Tensor。
+    - device: 设备类型，类型为 torch.device。
+
+    返回值:
+    - total_accuracy: 模型在测试数据集上的总准确率，类型为 float。
+    - total_propability: 每个类别的预测概率矩阵，类型为 numpy.ndarray。
+    - total_classified: 每个类别的分类结果矩阵，类型为 numpy.ndarray。
+
+    该函数通过遍历测试数据集，计算模型预测正确的样本数占总样本数的比例，从而得到模型的总准确率。
+    同时，计算每个类别的预测概率和分类结果，并生成相应的矩阵。
+    """
     total_number = 0
     total_correct = 0
     total_propability = np.zeros([class_number, class_number+1])
@@ -125,35 +187,22 @@ def evaluate_model(net, test_X, test_y, device):
     total_accuracy = round(total_correct / total_number, 3) * 100
     print("Total accuracy: ", total_accuracy)
     np.set_printoptions(suppress=True, formatter={'float_kind': '{:16.1f}'.format})
-    # save_results(total_accuracy, total_propability, total_classified)
     for i in range(class_number):
         gest_num = int(total_propability[i][class_number])
         total_propability[i] = np.round((total_propability[i] / gest_num), 3)
     return total_accuracy,total_propability,total_classified
 
-#这个函数后面考虑弃用
-# def save_results(total_accuracy, total_propability, total_classified):
-    with open("results.txt", 'a') as f:
-        print(total_accuracy, file=f)
-
-    for i in range(class_number):
-        gest_num = int(total_propability[i][class_number])
-        total_propability[i] = np.round((total_propability[i] / gest_num), 3)
-
-    np.savetxt("propability matrix.txt", total_propability, fmt='%f')
-    np.savetxt("confusion matrix.txt", total_classified, fmt='%f')
-
 def visualize_loss_accuracy(loss_list, accuracy_list, iteration_list):
     plt.plot(iteration_list, loss_list)
     plt.xlabel("迭代次数")
     plt.ylabel("损失")
-    plt.title("循环神经网络：损失 vs 迭代次数")
+    plt.title("损失变化")
     plt.savefig("assets/loss.png",dpi=300, bbox_inches='tight', pad_inches=0.1)
     plt.show()
     plt.plot(iteration_list, accuracy_list, color="red")
     plt.xlabel("迭代次数")
     plt.ylabel("准确率")
-    plt.title("循环神经网络：准确率 vs 迭代次数")
+    plt.title("准确率变化")
     plt.savefig("assets/accuracy.png",dpi=300, bbox_inches='tight', pad_inches=0.1)
     plt.show()
 
@@ -180,6 +229,19 @@ def visualize_confusion_propability_matrix(matrix,title):
     plt.show()
 
 def execute_ml_workflow(epochs, optimizer_step_value, test_percent, break_limit):
+    """
+    执行机器学习工作流程的主函数。
+
+    参数:
+    - epochs: 训练的轮数，类型为 int。
+    - optimizer_step_value: 优化器的学习率，类型为 float。
+    - test_percent: 测试集占总数据集的比例，类型为 float。
+    - break_limit: 提前终止训练的准确率阈值，类型为 float。
+
+    该函数首先加载数据集，并将其分为训练集和测试集。然后初始化神经网络模型、损失函数和优化器。
+    接着调用训练函数进行模型训练，并在训练过程中记录损失值和准确率。训练完成后，评估模型在测试集上的性能，
+    并绘制损失函数与准确率的变化曲线、准确率矩阵和混淆矩阵。如果模型的总准确率超过设定的阈值，则保存模型。
+    """
     net = RNN_LSTM().to(device)
     gestures = DataProcessed()
     #训练集不存在的话，要先创建一个训练集

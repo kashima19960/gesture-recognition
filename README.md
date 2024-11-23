@@ -1,76 +1,61 @@
-https://blog.51cto.com/u_12413309/6243649
+# Hand Gesture Recognition Based on Long Short-Term Memory Neural Network
 
-https://ieee-dataport.org/open-access/hand-gestures-recorded-mm-wave-fmcw-radar-awr1642
+## Dataset Description
 
-HAND GESTURES RECORDED WITH MM-WAVE FMCW RADAR (AWR1642)
+The dataset used in this project is sourced from [HAND GESTURES RECORDED WITH MM-WAVE FMCW RADAR (AWR1642)](https://ieee-dataport.org/open-access/hand-gestures-recorded-mm-wave-fmcw-radar-awr1642).
 
-[![https://ieee-dataport.org/sites/default/files/styles/large/public/IEEE_image2.png?itok=DhD7c62M](./assets/clip_image001.png)](https://ieee-dataport.org/sites/default/files/IEEE_image2.png)
+![](./assets/clip_image001.png)
 
-Citation Author(s):
+The dataset contains 4600 samples, covering 12 different hand gesture movements. The data was collected by four different individuals using the FMCW AWR1642 radar. Each sample is saved as a CSV file and is associated with the corresponding gesture type. The gesture descriptions are as follows: (G1) Left arm wave – a complete wave of the arm from right to left, (G2) Right arm wave – a complete wave of the arm from left to right, (G3) Hand away – the hand moves away from the radar, (G4) Hand towards – the hand moves towards the radar, (G5) Arm up – the arm moves from down to up, (G6) Arm down – the arm moves from up to down, (G7) Palm up – the palm rotates upwards, (G8) Palm down – the palm rotates downwards, (G9) Hand left – the hand moves left (without arm movement), (G10) Hand right – the hand moves right, (G11) Horizontal fist, (G12) Vertical fist.
 
-The dataset contains 4600 samples of 12 different hand-movement gestures. Data were collected from four different people using the FMCW AWR1642 radar. Each sample is saved as a CSV file associated with its gesture type. Gesture description: (G1) arm to left – full swipe of an arm from right to left, (G2) arm to right – full swipe of an arm from left to right, (G3) hand away – taking a hand away from radar, (G4) hand closer – taking a hand closer to the radar, (G5) arm up – an arm movement from bottom to top, (G6) arm down – an arm movement from top to bottom, (G7) palm up – rotating a palm upwards, (G8) palm down – rotating a palm downwards, (G9) hand to the left – a hand movement to the left (without an arm movement), (G10) hand to the right – a hand movement to the right, (G11) closing a fist horizontally, (G12) closing a fist vertically.
+## Project Directory Structure
 
-**INSTRUCTIONS:**
+```
+.
+├── DataProcessed.py Contains classes and methods related to data preprocessing, responsible for reading and preprocessing the dataset.
+├── Neural_Networks.py Contains neural network model definitions, training, evaluation, and visualization methods for classification tasks.
+├── main.py The main program, used to load the model and evaluate its accuracy on test data.
+└── requirements.txt List of Python libraries required for the project.
+└── assets Stores generated images.
+└── model.pth Pre-trained model file.
+└── ConstantDefinition.py Stores parameters for network training, which can affect the training effect of the network by adjusting these parameters.
+```
 
-Dataset is divided into 12 separate folders associated to different gesture types. Each folder contains gesture samples saved as a CSV file. First line of the CSV file is a headline describing the columns of data: FrameNumber, ObjectNumber, Range, Velocity, PeakValue, x coordinate, y coordinate. In order to read the gestures into matrix representation copy all 12 folders into single folder called “data”. Copy the “read_gesture.py” script to the same folder as “data” and run it. Script will convert CSV files of given gesture type into the numpy matrix.
+## Usage Instructions
 
-中文：
+### Dependency Versions
 
-该数据集包含12种不同手势的4600个样本。
+- `python3.10`
+- `matplotlib==3.9.2`
+- `numpy==2.1.3`
+- `torch==2.5.1+cu124`
+  Installing different versions of libraries may cause dependency errors, so it is best to create a virtual environment to download the dependencies.
 
-使用FMCW非流动AWR1642从四个不同的人采集数据，每个示例都保存为与其手势类型关联的CSV文件。
+### Installing Dependencies
 
-(G1) 手臂向左-手臂从右向左完全滑动
+Run the following command in the project root directory to install the required Python libraries:
 
-(G2) 手臂向右-手臂从左向右完全滑动
+```bash
+pip install -r requirements.txt
+```
 
-(G3) 手离开-将手从雷达上移开
+> If your computer does not have CUDA installed, please change `torch==2.5.1+cu124` to `torch==2.5.1` in `requirements.txt` to use CPU for training.
 
-(G4) 手靠近-将一中手靠近雷达
+### Running the Project
 
-(G5) 手臂向上——从底部到顶部的手臂运动
+`model.pth` is a pre-trained model provided by the author. You can directly run the following command to view the model's accuracy:
 
-(G6) 手臂向下——从顶部到底部的手臂运动
+```bash
+python main.py
+```
 
-(G7) 手掌向上——旋转手掌向上
+### Output Results
 
-(G8) 手掌向下——向下旋转手掌
+- The model's accuracy on the test data will be printed in the console.
+- The loss and accuracy change graphs will be saved in the `assets/` directory as `loss.png` and `accuracy.png`, respectively.
+- The confusion matrix graph will be saved in the `assets/` directory with the file name `title.png`.
 
-(G9) 手向左——手向左移动（没有手臂移动）
-
-(G10) 手向右——手向右移动
-
-(G11) 横抱拳
-
-(G12) 竖抱拳
-
-数据集分为12个独立的文件平吴，与不同的手势类型相关联。每个文件夹都包含保存为CSV文件的手势示例
-
-Csv文件的第一行是描述数据列的标题
-
-FrameNumber、ObjectNumber，Range, Velocity, PeakValue, x坐标、y坐标
-
-为了将手势读入Python程序中，将所有12个文件夹复制到名为”data”的单个文件夹下，并将“read_gesture.py”脚本复制到与’data’相同的文件中并运行它，脚本会将给定手势类型的csv文件转换为numpy矩阵。
-
-如果你喜欢使用MATLAB，也可以使用Python将数据格式转为.mat.
-
-
-
-以下是根据您提供的混淆矩阵数据制作的表格：
-
-|    | 1      | 2      | 3      | 4      | 5      | 6      | 7      | 8      | 9      | 10     | 11     | 12     |
-| -- | ------ | ------ | ------ | ------ | ------ | ------ | ------ | ------ | ------ | ------ | ------ | ------ |
-| 1  | 99.875 | 0.000  | 0.000  | 0.004  | 0.000  | 0.004  | 0.000  | 0.061  | 0.002  | 0.000  | 0.033  | 0.021  |
-| 2  | 0.005  | 97.516 | 0.000  | 1.282  | 0.004  | 0.003  | 0.312  | 0.014  | 0.017  | 0.411  | 0.112  | 0.325  |
-| 3  | 0.001  | 0.617  | 98.476 | 0.001  | 0.028  | 0.029  | 0.253  | 0.000  | 0.000  | 0.000  | 0.563  | 0.032  |
-| 4  | 0.004  | 0.001  | 0.000  | 99.946 | 0.000  | 0.000  | 0.000  | 0.000  | 0.000  | 0.000  | 0.007  | 0.041  |
-| 5  | 0.000  | 0.000  | 0.014  | 0.000  | 87.154 | 12.507 | 0.178  | 0.027  | 0.006  | 0.112  | 0.001  | 0.001  |
-| 6  | 0.001  | 0.000  | 0.007  | 0.000  | 15.160 | 82.157 | 0.052  | 0.277  | 0.319  | 1.000  | 0.713  | 0.315  |
-| 7  | 0.000  | 4.357  | 0.002  | 0.001  | 0.512  | 0.010  | 94.990 | 0.000  | 0.003  | 0.056  | 0.023  | 0.047  |
-| 8  | 2.802  | 0.008  | 0.000  | 0.304  | 0.512  | 0.120  | 0.008  | 91.919 | 2.067  | 2.148  | 0.095  | 0.017  |
-| 9  | 0.000  | 0.009  | 0.000  | 0.002  | 1.444  | 0.025  | 0.002  | 0.047  | 74.676 | 23.639 | 0.108  | 0.045  |
-| 10 | 0.000  | 0.001  | 0.000  | 0.001  | 0.808  | 1.165  | 0.004  | 1.194  | 3.916  | 92.871 | 0.031  | 0.011  |
-| 11 | 0.001  | 0.014  | 0.001  | 0.042  | 0.003  | 0.000  | 0.000  | 0.000  | 0.000  | 0.001  | 84.138 | 15.799 |
-| 12 | 0.014  | 0.042  | 0.000  | 0.821  | 0.005  | 0.000  | 0.000  | 0.001  | 0.016  | 1.266  | 10.372 | 87.462 |
-
-表格中的行和列分别表示预测类别和实际类别。每个单元格中的数值表示预测为该行类别且实际为该列类别的样本比例。最后一列（1.000）表示每一行的总和，确保每一行的比例总和为1。
+## References
+- For more detailed information on data preprocessing, please refer to the `DataProcessed.py` file.
+- For more detailed information on neural network model definitions and training, please refer to the `Neural_Networks.py` file.
+- For more detailed information on the main program, please refer to the `main.py` file.
