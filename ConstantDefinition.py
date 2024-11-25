@@ -1,17 +1,19 @@
 """
-全局常量定义
+author: 木人舟
+brief: Define the parameters related to training and testing of the LSTM model. You can modify the training performance by adjusting the parameters in this file.
 """
-neurons_num = 32  # 神经元数量
-num_layers = 2  # 网络层数
-frame_parameters = 3  # 帧参数数量
-epochs = 10  # 训练轮数
-optimizer_step_value = 0.001  # PyTorch优化器的步长值
-test_percent = 0.2# 测试数据集占总数据集的比例
-break_limit = 94# 准确率阈值，当超过阈值就停止训练
-class_number = 12  # 类别数量
-
+neurons_num = 32  # Number of neurons in the LSTM network
+num_layers = 2  # Number of hidden layers in the LSTM network
+frame_parameters = 3  # Number of frame parameters, which are x, y, velocity
+epochs = 10  # Number of training epochs
+optimizer_step_value = 0.001  # Step value for the PyTorch optimizer
+test_percent = 0.2  # Proportion of the test dataset to the total dataset
+break_limit = 94  # Accuracy threshold, training stops when the threshold is exceeded
+test_percent = 0.2  # Proportion of the test dataset to the total dataset
+break_limit = 95  # Accuracy threshold, training stops when the threshold is exceeded
+class_number = 12  # Number of classes, there are 12 types of gestures
 """
-12种手势的定义
+Definition of 12 types of gestures
 """
 
 ARM_TO_LEFT = "arm_to_left"
@@ -26,10 +28,9 @@ HAND_DOWN = "hand_down"
 HAND_UP = "hand_up"
 PALM_DOWN = "hand_rotation_palm_down"
 PALM_UP = "hand_rotation_palm_up"
-STOP_GESTURE = "stop_gesture"
 
 """
-给手势进行编码，因为有12个，所有从0~11进行编码
+Encoding gestures, as there are 12, so encoding them from 0 to 11.
 """
 LABELS = {ARM_TO_LEFT: 0, ARM_TO_RIGHT: 1,
           HAND_AWAY: 2, HAND_CLOSE: 3,
