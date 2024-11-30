@@ -1,6 +1,7 @@
 """
 author: 木人舟
 brief: This code implements a classification model based on LSTM (Long Short-Term Memory Network)
+contact:CodingCV@outlook.com
 """
 import numpy as np
 import torch
@@ -12,7 +13,7 @@ import matplotlib.pyplot as plt
 from DataProcessed import *
 import warnings
 from ConstantDefinition import *
-warnings.filterwarnings("ignore")  # Ignore warning messages, as long as the code runs (just kidding) 😋😋😋
+warnings.filterwarnings("ignore")  # Ignore warning messages, as long as the can code runs (just kidding) 😋😋😋
 
 # Default to using GPU for accelerated training. Please download the Pytorch version that supports Cuda, and your computer needs an Nvidia graphics card
 device = torch.device('cuda' if torch.cuda.is_available() else 'cpu')

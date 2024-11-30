@@ -1,6 +1,7 @@
 """
 author: 木人舟
 brief: Define the parameters related to training and testing of the LSTM model. You can modify the training performance by adjusting the parameters in this file.
+contact:CodingCV@outlook.com
 """
 neurons_num = 32  # Number of neurons in the LSTM network
 num_layers = 2  # Number of hidden layers in the LSTM network

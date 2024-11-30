@@ -1,6 +1,7 @@
 """
 author: 木人舟
 brief: Running this file will start the training of the model, evaluate the network performance, and save the model parameters to the file model.pth.
+contact:CodingCV@outlook.com
 """
 # Running this code directly will show you the results! 🤠🤠🤠
 
