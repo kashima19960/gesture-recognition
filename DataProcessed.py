@@ -1,6 +1,7 @@
 """
 author: 木人舟
 brief: Converts all gesture csv files in the data folder into ndarray data and saves them as npy files.
+contact:CodingCV@outlook.com
 """
 import numpy as np
 import os
